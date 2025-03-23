@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
-import { Header } from './Header';
-import { Footer } from './Footer';
-import type { Chapter, Lesson, VocabularyItem } from '../lib/supabase';
-import { ChevronLeft, ChevronRight, Book, Volume2, PlayCircle } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { supabase } from "../lib/supabase";
+import { Header } from "./Header";
+import { Footer } from "./Footer";
+import type { Chapter, Lesson, VocabularyItem } from "../lib/supabase";
+import { ChevronLeft, ChevronRight, Book } from "lucide-react";
 
 export default function LessonContent() {
   const [chapters, setChapters] = useState<Chapter[]>([]);
@@ -20,46 +20,48 @@ export default function LessonContent() {
     async function fetchData() {
       try {
         const { data: chaptersData, error: chaptersError } = await supabase
-          .from('chapters')
-          .select('*')
-          .order('order_number');
+          .from("chapters")
+          .select("*")
+          .order("order_number");
 
         if (chaptersError) throw chaptersError;
 
         const { data: lessonsData, error: lessonsError } = await supabase
-          .from('lessons')
-          .select('*')
-          .order('order_number');
+          .from("lessons")
+          .select("*")
+          .order("order_number");
 
         if (lessonsError) throw lessonsError;
 
         const lessonsByChapter: Record<string, Lesson[]> = {};
         lessonsData?.forEach((lesson: Lesson) => {
-          if (!lessonsByChapter[lesson.chapter_id]) {
-            lessonsByChapter[lesson.chapter_id] = [];
+          if (lesson.chapter_id) {
+            if (!lessonsByChapter[lesson.chapter_id]) {
+              lessonsByChapter[lesson.chapter_id] = [];
+            }
+            lessonsByChapter[lesson.chapter_id].push(lesson);
           }
-          lessonsByChapter[lesson.chapter_id].push(lesson);
         });
 
         setChapters(chaptersData || []);
         setLessons(lessonsByChapter);
-        
+
         if (lessonsData && lessonsData.length > 0) {
           const firstLesson = lessonsData[0];
           setSelectedLesson(firstLesson);
-          
+
           const { data: vocabData, error: vocabError } = await supabase
-            .from('vocabulary_items')
-            .select('*')
-            .eq('lesson_id', firstLesson.id)
-            .order('order_number');
+            .from("vocabulary_items")
+            .select("*")
+            .eq("lesson_id", firstLesson.id)
+            .order("order_number");
 
           if (vocabError) throw vocabError;
           setVocabularyItems(vocabData || []);
         }
       } catch (err) {
-        console.error('Error fetching data:', err);
-        setError(err instanceof Error ? err.message : 'Failed to fetch data');
+        console.error("Error fetching data:", err);
+        setError(err instanceof Error ? err.message : "Failed to fetch data");
       } finally {
         setLoading(false);
       }
@@ -72,15 +74,15 @@ export default function LessonContent() {
     setSelectedLesson(lesson);
     try {
       const { data: vocabData, error: vocabError } = await supabase
-        .from('vocabulary_items')
-        .select('*')
-        .eq('lesson_id', lesson.id)
-        .order('order_number');
+        .from("vocabulary_items")
+        .select("*")
+        .eq("lesson_id", lesson.id)
+        .order("order_number");
 
       if (vocabError) throw vocabError;
       setVocabularyItems(vocabData || []);
     } catch (err) {
-      console.error('Error fetching vocabulary items:', err);
+      console.error("Error fetching vocabulary items:", err);
     }
   };
 
@@ -118,7 +120,7 @@ export default function LessonContent() {
           {/* Sidebar */}
           <div
             className={`fixed inset-y-0 left-0 transform ${
-              sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+              sidebarOpen ? "translate-x-0" : "-translate-x-full"
             } lg:translate-x-0 lg:relative lg:inset-auto z-50 w-64 bg-white shadow-lg transition duration-200 ease-in-out lg:shadow-none border-r border-gray-200`}
           >
             <div className="h-full overflow-y-auto">
@@ -136,8 +138,8 @@ export default function LessonContent() {
                             onClick={() => handleLessonChange(lesson)}
                             className={`w-full text-left px-3 py-2 rounded-md text-sm transition-colors duration-150 ${
                               selectedLesson?.id === lesson.id
-                                ? 'bg-[#4263eb] text-white'
-                                : 'text-[#495057] hover:bg-gray-50'
+                                ? "bg-[#4263eb] text-white"
+                                : "text-[#495057] hover:bg-gray-50"
                             }`}
                           >
                             {lesson.title_mn}
@@ -170,7 +172,10 @@ export default function LessonContent() {
                         </div>
                         {selectedLesson.audio_url && (
                           <audio controls className="w-96">
-                            <source src={selectedLesson.audio_url} type="audio/mpeg" />
+                            <source
+                              src={selectedLesson.audio_url}
+                              type="audio/mpeg"
+                            />
                           </audio>
                         )}
                       </div>
@@ -180,8 +185,8 @@ export default function LessonContent() {
                           onClick={() => setShowHiragana(!showHiragana)}
                           className={`px-4 py-2 rounded-md text-sm font-medium transition-colors duration-150 ${
                             showHiragana
-                              ? 'bg-[#4263eb] text-white'
-                              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                              ? "bg-[#4263eb] text-white"
+                              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                           }`}
                         >
                           Хирагана
@@ -190,8 +195,8 @@ export default function LessonContent() {
                           onClick={() => setShowTranslation(!showTranslation)}
                           className={`px-4 py-2 rounded-md text-sm font-medium transition-colors duration-150 ${
                             showTranslation
-                              ? 'bg-[#4263eb] text-white'
-                              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                              ? "bg-[#4263eb] text-white"
+                              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                           }`}
                         >
                           Орчуулга
@@ -230,44 +235,45 @@ export default function LessonContent() {
                           </thead>
                           <tbody className="bg-white divide-y divide-gray-200">
                             {vocabularyItems.map((item) => (
-                              <tr key={item.id} className="hover:bg-gray-50 transition-colors duration-150">
+                              <tr
+                                key={item.id}
+                                className="hover:bg-gray-50 transition-colors duration-150"
+                              >
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                   {item.order_number}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
-                                  <span className="text-lg font-medium text-[#495057]">{item.kanji}</span>
+                                  <span className="text-lg font-medium text-[#495057]">
+                                    {item.kanji}
+                                  </span>
                                 </td>
                                 {showHiragana && (
                                   <td className="px-6 py-4 whitespace-nowrap">
-                                    <span className="text-sm text-[#495057]">{item.hiragana}</span>
+                                    <span className="text-sm text-[#495057]">
+                                      {item.hiragana}
+                                    </span>
                                   </td>
                                 )}
                                 {showTranslation && (
                                   <td className="px-6 py-4 whitespace-nowrap">
-                                    <span className="text-sm text-[#495057]">{item.translation}</span>
+                                    <span className="text-sm text-[#495057]">
+                                      {item.translation}
+                                    </span>
                                   </td>
                                 )}
                                 <td className="px-6 py-4">
                                   <div className="space-y-1">
-                                    <p className="text-[#495057]">{item.example_ja}</p>
+                                    <p className="text-[#495057]">
+                                      {item.example_ja}
+                                    </p>
                                     {showTranslation && (
-                                      <p className="text-[#868e96]">{item.example_mn}</p>
+                                      <p className="text-[#868e96]">
+                                        {item.example_mn}
+                                      </p>
                                     )}
                                   </div>
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                  {item.audio_url && (
-                                    <button 
-                                      className="text-[#4263eb] hover:text-[#364fc7] transition-colors duration-150"
-                                      onClick={() => {
-                                        const audio = new Audio(item.audio_url);
-                                        audio.play();
-                                      }}
-                                    >
-                                      <PlayCircle className="w-6 h-6" />
-                                    </button>
-                                  )}
-                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap"></td>
                               </tr>
                             ))}
                           </tbody>

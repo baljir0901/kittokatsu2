@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Navigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import { supabase } from '../lib/supabase';
+import React, { useState, useEffect } from "react";
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import { supabase } from "../lib/supabase";
 
-export default function PrivateRoute({ children }: { children: React.ReactNode }) {
+export default function PrivateRoute({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const { user, loading } = useAuth();
   const [userRole, setUserRole] = useState<string | null>(null);
   const [roleLoading, setRoleLoading] = useState(true);
@@ -17,22 +21,23 @@ export default function PrivateRoute({ children }: { children: React.ReactNode }
 
       try {
         const { data: userRoles, error } = await supabase
-          .from('user_roles')
-          .select(`
+          .from("user_roles")
+          .select(
+            `
             roles (
               name
             )
-          `)
-          .eq('user_id', user.id)
+          `
+          )
+          .eq("user_id", user.id)
           .single();
 
         if (error) throw error;
-
-        if (userRoles?.roles?.name) {
-          setUserRole(userRoles.roles.name);
+        if (userRoles?.roles?.[0]?.name) {
+          setUserRole(userRoles.roles[0].name);
         }
       } catch (err) {
-        console.error('Error checking user role:', err);
+        console.error("Error checking user role:", err);
       } finally {
         setRoleLoading(false);
       }
@@ -55,17 +60,17 @@ export default function PrivateRoute({ children }: { children: React.ReactNode }
   }
 
   // If user has no role or pending role, redirect to contact page
-  if (!userRole || userRole === 'pending') {
+  if (!userRole || userRole === "pending") {
     return <Navigate to="/contact" />;
   }
 
   // If user is admin and trying to access student pages, allow it
-  if (userRole === 'admin') {
+  if (userRole === "admin") {
     return <>{children}</>;
   }
 
   // If user is student and trying to access admin pages, redirect to dashboard
-  if (userRole === 'student' && window.location.pathname.includes('/admin')) {
+  if (userRole === "student" && window.location.pathname.includes("/admin")) {
     return <Navigate to="/dashboard" />;
   }
 

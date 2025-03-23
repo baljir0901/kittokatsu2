@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { GraduationCap, Menu, Eye, EyeOff, LogOut, User } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { GraduationCap, Menu, Eye, EyeOff, LogOut, User } from "lucide-react";
+import { useAuth } from "../contexts/AuthContext";
 
 interface HeaderProps {
   sidebarOpen: boolean;
@@ -27,9 +27,9 @@ export function Header({
   const handleSignOut = async () => {
     try {
       await signOut();
-      navigate('/login');
+      navigate("/login");
     } catch (error) {
-      console.error('Error signing out:', error);
+      console.error("Error signing out:", error);
     }
   };
 
@@ -59,19 +59,31 @@ export function Header({
                 <button
                   onClick={() => setShowHiragana(!showHiragana)}
                   className={`flex items-center px-3 py-2 rounded-md text-sm font-medium ${
-                    showHiragana ? 'bg-[#1F2937] text-white' : 'text-gray-300 hover:bg-[#1F2937]'
+                    showHiragana
+                      ? "bg-[#1F2937] text-white"
+                      : "text-gray-300 hover:bg-[#1F2937]"
                   } transition-colors duration-150`}
                 >
-                  {showHiragana ? <Eye className="w-4 h-4 mr-2" /> : <EyeOff className="w-4 h-4 mr-2" />}
+                  {showHiragana ? (
+                    <Eye className="w-4 h-4 mr-2" />
+                  ) : (
+                    <EyeOff className="w-4 h-4 mr-2" />
+                  )}
                   Хирагана
                 </button>
                 <button
                   onClick={() => setShowTranslation(!showTranslation)}
                   className={`flex items-center px-3 py-2 rounded-md text-sm font-medium ${
-                    showTranslation ? 'bg-[#1F2937] text-white' : 'text-gray-300 hover:bg-[#1F2937]'
+                    showTranslation
+                      ? "bg-[#1F2937] text-white"
+                      : "text-gray-300 hover:bg-[#1F2937]"
                   } transition-colors duration-150`}
                 >
-                  {showTranslation ? <Eye className="w-4 h-4 mr-2" /> : <EyeOff className="w-4 h-4 mr-2" />}
+                  {showTranslation ? (
+                    <Eye className="w-4 h-4 mr-2" />
+                  ) : (
+                    <EyeOff className="w-4 h-4 mr-2" />
+                  )}
                   Орчуулга
                 </button>
                 <div className="relative">
