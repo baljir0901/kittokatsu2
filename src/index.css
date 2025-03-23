@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: 'Noto Serif', Georgia, 'Times New Roman', serif;
+  background-color: #f8f5f0;
+}
+
+.classic-paper {
+  background-color: #fff;
+  border: 1px solid #e2d9c9;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.classic-header {
+  background: linear-gradient(to right, #2c3e50, #3c4e60);
+  border-bottom: 3px solid #c0a375;
+}
+
+.chapter-card {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.chapter-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.lesson-button {
+  transition: all 0.2s ease;
+}
+
+.lesson-button:hover {
+  background-color: #f3ece1;
+}
+
+.lesson-button.active {
+  background-color: #e9ddc7;
+  border-left: 3px solid #c0a375;
+}
+
+.classic-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.classic-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.classic-scrollbar::-webkit-scrollbar-thumb {
+  background: #c0a375;
+  border-radius: 4px;
+}
+
+.classic-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #a88f62;
+}
+
+.prose-classic {
+  font-family: 'Noto Serif', Georgia, 'Times New Roman', serif;
+  line-height: 1.8;
+}
+
+.prose-classic h1 {
+  font-family: 'Noto Serif', Georgia, 'Times New Roman', serif;
+  color: #2c3e50;
+}
+
+.audio-player {
+  background: #f8f5f0;
+  border: 1px solid #e2d9c9;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.audio-player audio {
+  width: 100%;
+}
